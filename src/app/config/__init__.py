@@ -10,7 +10,7 @@ PASSWORD_DB = os.getenv('PASSWORD_DB')
 class Development(object):
   DEBUG = True
   TESTING = False
-  SQLALCHEMY_DATABASE_URI = f"postgresql://{USER_DB}:{PASSWORD_DB}@localhost:5432/{NAME_DB}-testing"
+  SQLALCHEMY_DATABASE_URI = f"postgresql://{USER_DB}:{PASSWORD_DB}@localhost:5432/{NAME_DB}-development"
   SQLALCHEMY_TRACK_MODIFICATIONS = os.getenv('SQLALCHEMY_TRACK_MODIFICATIONS')
   SECRET_KEY = os.getenv('SECRET_KEY')
   GOOGLE_CLIENT_ID = os.getenv('GOOGLE_CLIENT_ID')

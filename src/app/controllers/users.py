@@ -26,7 +26,6 @@ flow = Flow.from_client_config(
 )
 
 @user.route('/create', methods = ["POST"])
-@requires_access_level("WRITE")
 def create():
   list_keys = ["city_id", "name", "age", "email", "password"]
 
