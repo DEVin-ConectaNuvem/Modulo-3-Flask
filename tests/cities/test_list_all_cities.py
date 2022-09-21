@@ -18,7 +18,7 @@ def test_cities_not_return_data(client, logged_in_client):
   response = client.get('/cities/get_all_cities/29', headers={
     "Authorization": f"Bearer {logged_in_client}"
   })
-  assert len(response.json["records"]) == 0
+  assert response.json["error"] == "Não tem cidades disponíveis"
 
 def test_cities_not_authenticated(client):
   assert client.get('/cities/get_all_cities/1').status_code == 403

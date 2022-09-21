@@ -42,7 +42,8 @@ def session(app):
                 sess2.begin_nested()
 
         DB.session = sess
-        yield sess
+        #O yield faz parte do protocolo de iteradores do python, ele evita você ter que criar o elemento iterável efetivamente, tornando seu código mais escalável
+        yield sess 
         sess.remove()
         transaction.rollback()
         connection.close()

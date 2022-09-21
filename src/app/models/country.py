@@ -17,7 +17,8 @@ class Country(DB.Model):
       language = language
     )
     country.save()
-
+    return country
+    
   def save(self):
     DB.session.add(self)
     DB.session.commit()

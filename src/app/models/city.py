@@ -19,7 +19,8 @@ class City(DB.Model):
       name = name
     )
     city.save()
-
+    return city
+    
   def save(self): 
     DB.session.add(self)
     DB.session.commit()

@@ -14,7 +14,8 @@ class Permission(DB.Model):
       description = description
     )
     permission.save()
-
+    return permission
+    
   def save(self):
     DB.session.add(self)
     DB.session.commit()

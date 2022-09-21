@@ -129,4 +129,4 @@ dmypy.json
 .pyre/
 
 poetry.toml
-migrations
+src/app/migrations
