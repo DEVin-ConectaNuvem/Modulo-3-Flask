@@ -26,6 +26,7 @@ flow = Flow.from_client_config(
 )
 
 @user.route('/create', methods = ["POST"])
+@requires_access_level("WRITE")
 def create():
   list_keys = ["city_id", "name", "age", "email", "password"]
 
@@ -150,5 +151,13 @@ def logout():
   return Response(
       response=json.dumps({"message":"Você foi deslogado."}),
       status=202,
+      mimetype='application/json'
+    )
+
+@user.route("/update", methods = ["PUT"])
+def update():
+  return Response(
+      response=json.dumps({"message":"Você atualizou seus dados."}),
+      status=204,
       mimetype='application/json'
     )
