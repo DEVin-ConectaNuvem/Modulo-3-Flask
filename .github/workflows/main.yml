@@ -21,3 +21,12 @@ jobs:
 
       - name: Configure Docker
         run: gcloud auth configure-docker --quiet
+
+      - name: Build Docker Image
+        run: docker build -t $IMAGE_NAME .
+
+      - name: Push Docker Image
+        run: docker push $IMAGE_NAME
+
+      - name: Deploy Docker Image
+        run: gcloud run deploy site --image $IMAGE_NAME --region us-central1
