@@ -6,11 +6,13 @@ from flask.globals import session
 from flask.wrappers import Response
 from werkzeug.utils import redirect
 from src.app.middlewares.auth import requires_access_level
-from src.app.utils import exist_key, generate_jwt
+from src.app.utils import exist_key, generate_jwt, exist_value
 from src.app.services.users_service import create_user, login_user, get_user_by_email
+from src.app.models.user import User, user_share_schema
 from google_auth_oauthlib.flow import Flow
 from google import auth 
 from google.oauth2 import id_token 
+from jwt import decode
 
 user = Blueprint('user', __name__, url_prefix="/user")
 CLIENT_SECRETS_FILENAME = os.environ.get("GOOGLE_CLIENT_SECRETS")
@@ -155,7 +157,55 @@ def logout():
     )
 
 @user.route("/update", methods = ["PUT"])
+@requires_access_level("WRITE")
 def update():
+  token = request.headers["Authorization"]
+  token_pure = token.replace("Bearer ", "")
+  decoded = decode(token_pure, current_app.config["SECRET_KEY"], "HS256")
+ 
+  data = request.get_json()
+  validate_fields = exist_value(data)
+  
+  if "error" in validate_fields:
+    return Response(
+      response=json.dumps(validate_fields),
+      status=400,
+      mimetype='application/json'
+    )
+  
+  if data == {}:
+    return Response(
+      response=json.dumps({"error":"Não foi enviado nenhum dado para fazer alteração."}),
+      status=400,
+      mimetype='application/json'
+    )
+    
+  if "id" in data:
+    return Response(
+      response=json.dumps({"error":"Não é possível alterar este campo."}),
+      status=400,
+      mimetype='application/json'
+    )
+  
+  current_user = User.query.filter_by(id=decoded["user_id"]).first_or_404()
+
+  if "email" in data:
+    try:
+        exist_email = User.query.filter(User.email == data["email"]).first_or_404()
+        exist_email_serialized = user_share_schema.dump(exist_email)
+        if "id" in exist_email_serialized:
+              return Response(
+                response=json.dumps({"error":"Você não pode alterar o e-mail."}),
+                status=403,
+                mimetype='application/json'
+              )
+    except: 
+      return Response(
+        response=json.dumps({"message":"Você atualizou seus dados."}),
+        status=204,
+        mimetype='application/json'
+      )
+
   return Response(
       response=json.dumps({"message":"Você atualizou seus dados."}),
       status=204,

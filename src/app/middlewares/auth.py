@@ -32,7 +32,8 @@ def requires_access_level(permission):
       try:
         token_pure = token.replace("Bearer ", "")
         decoded = decode(token_pure, current_app.config["SECRET_KEY"], "HS256")
-        current_user = User.query.get(decoded["user_id"])
+        current_user = User.query.filter(User.id == decoded["user_id"]).first_or_404()
+
       except:
         return Response(
           response=json.dumps({"error": "O Token é inválido"}),

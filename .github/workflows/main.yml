@@ -1,0 +1,23 @@
+name: "Módulo-3-flask"
+on:
+  push:
+    branches: [development]
+
+jobs:
+  deploy:
+    name: Config GCP
+    runs-on: ubuntu-latest
+    environment: gcp-env
+    env:
+      IMAGE_NAME: grc.io/${{secrets.GCP_PROJECT_ID}}/site:latest
+    steps: 
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - uses: google-github-actions/setup-gcloud@v.0.2.0
+        with:
+          service_account_key: ${{ secrets.GCP_CREDENTIALS }}
+          project_id: ${{secrets.GCP_PROJECT_ID}}
+
+      - name: Configure Docker
+        run: gcloud auth configure-docker --quiet

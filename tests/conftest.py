@@ -3,6 +3,7 @@ from src.app import create_app, DB
 from src.app.routes import routes
 from flask import json
 from sqlalchemy import event
+from src.app.models.user import User
 
 mimetype = 'application/json'
 headers = {
@@ -24,6 +25,21 @@ def logged_in_client(client):
   }
 
   response = client.post("user/login", data=json.dumps(data), headers=headers)
+  return response.json["token"]
+
+@pytest.fixture
+def logged_in_client_with_user_deleted(client):
+  data = {
+      "email": "loivaci.lopes1@example.com",
+      "password": "123Mudar!"
+  }
+
+  response = client.post("user/login", data=json.dumps(data), headers=headers)
+  user = User.query.filter(User.id == 33).first()
+  user.roles = []
+  DB.session.commit()
+  User.query.filter(User.id == 33).delete()
+  
   return response.json["token"]
 
 @pytest.fixture(scope="function", autouse=True)
