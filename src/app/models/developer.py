@@ -34,6 +34,7 @@ class Developer(DB.Model):
       technologies = technologies
     )
     developer.save()
+    return developer
     
   def save(self):
     DB.session.add(self)

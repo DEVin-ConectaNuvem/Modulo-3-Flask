@@ -7,7 +7,7 @@ from src.app.middlewares.auth import requires_access_level
 
 cities = Blueprint('cities', __name__, url_prefix="/cities")
 
-@cities.route('/get_all_cities/<state_id>', methods = ["GET"])
+@cities.route('/get_all_cities/<int:state_id>', methods = ["GET"])
 @requires_access_level("READ")
 def list_all_cities(state_id):
 

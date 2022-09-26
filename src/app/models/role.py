@@ -23,7 +23,8 @@ class Role(DB.Model):
       permissions = permissions
     )
     role.save()
-
+    return role
+    
   def save(self):
     DB.session.add(self)
     DB.session.commit()

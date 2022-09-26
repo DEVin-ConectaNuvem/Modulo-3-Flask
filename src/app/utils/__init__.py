@@ -23,14 +23,16 @@ def exist_key(request_json, list_keys):
 
   return {"error":  f"Está faltando o item {keys_not_have_in_request}", "status_code": 422 }
 
-def exist_value(request_json, data_in_db):
+def exist_value(request_json):
   
-  for json in data_in_db:
-    if json['id'] == request_json['id'] or json['tech'] == request_json['tech']:
-      return True
-
-  return False
-
+  for json in request_json.items():
+    key, value = json
+    if value != None:
+      pass
+    else:
+      return {"error":  f"O valor deste campo ['{key}'] não pode ser nulo"}
+  return request_json
+  
 def generate_jwt(payload):
     token = encode(payload, current_app.config["SECRET_KEY"], "HS256")
 

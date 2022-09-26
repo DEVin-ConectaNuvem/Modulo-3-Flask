@@ -41,6 +41,7 @@ class User(DB.Model):
       roles = roles
     )
     user.save()
+    return user
 
   @staticmethod
   def encrypt_password(password):
